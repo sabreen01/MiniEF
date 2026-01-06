@@ -17,3 +17,4 @@
 /Users/mawi/RiderProjects/practicing/practicing/obj/Debug/net10.0/practicing.pdb
 /Users/mawi/RiderProjects/practicing/practicing/obj/Debug/net10.0/practicing.genruntimeconfig.cache
 /Users/mawi/RiderProjects/practicing/practicing/obj/Debug/net10.0/ref/practicing.dll
+/Users/mawi/RiderProjects/practicing/practicing/obj/Debug/net10.0/practicing.sourcelink.json
