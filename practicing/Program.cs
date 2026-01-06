@@ -64,7 +64,7 @@ class Program
             await conn.OpenAsync();
             
             
-            Console.WriteLine("Fetching top 3 expensive products (Skip first 1)...");
+            // Console.WriteLine("Fetching top 3 expensive products (Skip first 1)...");
 
             // var products = await db.Products.Query()
             //     .Select("product_id", "name", "price")
@@ -86,16 +86,16 @@ class Program
             // }
             
             
-            var qb = db.Products.Query()
-                .Select("product_id", "name", "price")
-                .Where("price", 500, ">")
-                .OrderBy("price", ascending: false)
-                .Take(3) 
-                .Skip(1);
-            
-            string finalSql = qb.Build(); 
-            Console.WriteLine("--- [Stage 1: Build] ---");
-            Console.WriteLine("The SQL generated is: \n" + finalSql);
+            // var qb = db.Products.Query()
+            //     .Select("product_id", "name", "price")
+            //     .Where("price", 500, ">")
+            //     .OrderBy("price", ascending: false)
+            //     .Take(3) 
+            //     .Skip(1);
+            //
+            // string finalSql = qb.Build(); 
+            // Console.WriteLine("--- [Stage 1: Build] ---");
+            // Console.WriteLine("The SQL generated is: \n" + finalSql);
             //SELECT product_id, name, price
             //FROM products
             //WHERE price > @p0
@@ -103,19 +103,49 @@ class Program
             //LIMIT 3 OFFSET 1
         
             
+            //
+            // Console.WriteLine("\n--- [Stage 2: Execute] ---");
+            // var products = await qb.ExecuteListAsync(conn, reader => new ProductDto 
+            // {
+            //     Id = reader.GetInt32(0),
+            //     Name = reader.GetString(1),
+            //     Price = reader.GetDecimal(2)
+            // });
+            //
+            // foreach (var p in products)
+            // {
+            //     Console.WriteLine($"[ID: {p.Id}] {p.Name} - ${p.Price}");
+            // }
             
-            Console.WriteLine("\n--- [Stage 2: Execute] ---");
-            var products = await qb.ExecuteListAsync(conn, reader => new ProductDto 
-            {
-                Id = reader.GetInt32(0),
-                Name = reader.GetString(1),
-                Price = reader.GetDecimal(2)
-            });
+            //del
+            // var rowsAffected = await db.Products.DeleteAsync(10);
+            // Console.WriteLine("Deleting done " + rowsAffected + " rows...");
+            //
+            //
+            //update
             
-            foreach (var p in products)
-            {
-                Console.WriteLine($"[ID: {p.Id}] {p.Name} - ${p.Price}");
-            }
+            
+            // var changes = new Dictionary<string, object>
+            // {
+            //     { "price", 750.00m },
+            //     { "name", "Updated Gaming Mouse" }
+            // };
+            //
+            // int rows = await db.Products.UpdateAsync(10, changes);
+            //
+            // if (rows > 0) 
+            //     Console.WriteLine("Done... Product updated successfully.");
+            // else 
+            //     Console.WriteLine("Oops...  Product not found.");
+            
+            
+            var newProduct = new ProductDto 
+            { 
+                Name = "Mechanical Keyboard", 
+                Price = 1200.50m 
+            };
 
+            int result = await db.Products.AddAsync(newProduct);
+            Console.WriteLine(result > 0 ? "Product Added!" : "Failed!");
         }
     }
