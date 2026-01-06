@@ -86,16 +86,16 @@ class Program
             // }
             
             
-            // var qb = db.Products.Query()
-            //     .Select("product_id", "name", "price")
-            //     .Where("price", 500, ">")
-            //     .OrderBy("price", ascending: false)
-            //     .Take(3) 
-            //     .Skip(1);
-            //
-            // string finalSql = qb.Build(); 
-            // Console.WriteLine("--- [Stage 1: Build] ---");
-            // Console.WriteLine("The SQL generated is: \n" + finalSql);
+            var qb = db.Products.Query()
+                .Select("product_id", "name", "price")
+                .Where("price", 500, ">")
+                .OrderBy("price", ascending: false)
+                .Take(3) 
+                .Skip(1);
+            
+            string finalSql = qb.Build(); 
+            Console.WriteLine("--- [Stage 1: Build] ---");
+            Console.WriteLine("The SQL generated is: \n" + finalSql);
             //SELECT product_id, name, price
             //FROM products
             //WHERE price > @p0
@@ -116,6 +116,17 @@ class Program
             // {
             //     Console.WriteLine($"[ID: {p.Id}] {p.Name} - ${p.Price}");
             // }
+            
+            //refactoring هنا بقا
+            
+            
+            var products = await qb.ExecuteListAsync<ProductDto>(conn);
+
+            foreach (var p in products)
+            {
+                Console.WriteLine($"[ID: {p.Id}] {p.Name} - ${p.Price}");
+            }
+            
             
             //del
             // var rowsAffected = await db.Products.DeleteAsync(10);
@@ -139,13 +150,13 @@ class Program
             //     Console.WriteLine("Oops...  Product not found.");
             
             
-            var newProduct = new ProductDto 
-            { 
-                Name = "Mechanical Keyboard", 
-                Price = 1200.50m 
-            };
-
-            int result = await db.Products.AddAsync(newProduct);
-            Console.WriteLine(result > 0 ? "Product Added!" : "Failed!");
+            // var newProduct = new ProductDto 
+            // { 
+            //     Name = "Mechanical Keyboard", 
+            //     Price = 1200.50m 
+            // };
+            //
+            // int result = await db.Products.AddAsync(newProduct);
+            // Console.WriteLine(result > 0 ? "Product Added!" : "Failed!");
         }
     }

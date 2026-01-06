@@ -131,15 +131,48 @@ public class QueryBuilder
         return sql.ToString();
     }
 
-    public async Task<List<T>> ExecuteListAsync<T>(NpgsqlConnection conn, Func<NpgsqlDataReader, T> map)
+    // public async Task<List<T>> ExecuteListAsync<T>(NpgsqlConnection conn, Func<NpgsqlDataReader, T> map)
+    // {
+    //     await using var cmd = new NpgsqlCommand(Build(), conn);
+    //     foreach (var p in _parameters) cmd.Parameters.AddWithValue(p.Key, p.Value);
+    //     await using var reader = await cmd.ExecuteReaderAsync();
+    //     var results = new List<T>();
+    //     while (await reader.ReadAsync()) results.Add(map(reader));
+    //     return results;
+    // }
+    
+    //refactoring to be auto mapping 
+    
+    public async Task<List<T>> ExecuteListAsync<T>(NpgsqlConnection conn) where T : class, new()
     {
         await using var cmd = new NpgsqlCommand(Build(), conn);
         foreach (var p in _parameters) cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+        var list = new List<T>();
         await using var reader = await cmd.ExecuteReaderAsync();
-        var results = new List<T>();
-        while (await reader.ReadAsync()) results.Add(map(reader));
-        return results;
+
+        while (await reader.ReadAsync())
+        {
+            var item = new T();
+            var properties = typeof(T).GetProperties();
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                var columnName = reader.GetName(i);
+             
+                var prop = properties.
+                    FirstOrDefault(p => p.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+
+                if (prop != null && !reader.IsDBNull(i))
+                {
+                    prop.SetValue(item, reader.GetValue(i));
+                }
+            }
+            list.Add(item);
+        }
+        return list;
     }
+    
     
     
     public async Task<int> ExecuteNonQueryAsync(NpgsqlConnection conn)
