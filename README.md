@@ -31,6 +31,17 @@ The engine is built on a modular 4-layer architecture to ensure separation of co
 
 ---
 
+## 🧠 Technical Deep Dive: What I Learned
+
+Building **MiniEF** was a journey through advanced .NET concepts:
+
+- **Reflection Mastery**: Dynamically reading object properties to generate `INSERT` statements.
+- **Asynchronous Programming**: Extensive use of `Task`, `await`, and `Async` DB drivers for non-blocking I/O.
+- **Fluent Interface Design**: Implementing method chaining to create a "Natural Language" feel for developers.
+- **Defensive Programming**: Handling database connections and disposing resources correctly using `await using`.
+
+---
+
 ## 🚀 Quick Start Guide
 
 ### 1. Initialize the Context
@@ -64,17 +75,3 @@ await db.Products.UpdateAsync(id: 1, changes);
 
 // Delete Record
 await db.Products.DeleteAsync(id: 1);
-
-
-## 🧠 Technical Deep Dive: What I Learned
-
-
-Building MiniEF was a journey through advanced .NET concepts:
-
-Reflection Mastery: Dynamically reading object properties to generate INSERT statements.
-
-Asynchronous Programming: Extensive use of Task, await, and Async DB drivers for non-blocking I/O.
-
-Fluent Interface Design: Implementing method chaining to create a "Natural Language" feel for developers.
-
-Defensive Programming: Handling database connections and disposing resources correctly using await using.
